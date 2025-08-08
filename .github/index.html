@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تطبيق جرد المنتجات</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d32f2f">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>تطبيق جرد المنتجات</h1>
+
+    <div class="tabs">
+      <button onclick="switchTab('input')">➕ إدخال منتج</button>
+      <button onclick="switchTab('report')">📦 تقرير الجرد</button>
+      <button onclick="switchTab('cards')">📄 البطاقات</button>
+    </div>
+
+    <div id="tab-input" class="tab-content">
+      <form id="product-form">
+        <input type="text" id="name" placeholder="اسم المنتج" required>
+        <input type="number" id="quantity" placeholder="الكمية" min="1" required>
+        <input type="number" id="price" placeholder="السعر للوحدة" min="0.01" step="0.01" required>
+        <input type="text" id="customer" placeholder="اسم الزبون" required>
+        <button type="submit">➕ إضافة المنتج</button>
+      </form>
+
+      <div class="search-boxes">
+        <input type="text" id="searchProduct" placeholder="🔍 ابحث عن منتج" oninput="filterProducts()">
+        <input type="text" id="searchCustomer" placeholder="🔍 ابحث عن زبون" oninput="filterProducts()">
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>المنتج</th>
+            <th>الكمية</th>
+            <th>السعر</th>
+            <th>الإجمالي</th>
+            <th>حذف</th>
+          </tr>
+        </thead>
+        <tbody id="product-list"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">المجموع الكلي</td>
+            <td colspan="2" id="total">0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="actions">
+        <button onclick="showInventoryStatus()">📦 الحالة الإجمالية</button>
+        <button onclick="showProductCards()">📄 بطاقات المخزون</button>
+        <button onclick="exportToExcel()">📤 تصدير Excel</button>
+      </div>
+    </div>
+
+    <div id="tab-report" class="tab-content hidden">
+      <div id="report-content">انقر على "الحالة الإجمالية" لعرض التقرير.</div>
+    </div>
+
+    <div id="tab-cards" class="tab-content hidden">
+      <div id="cards-content">انقر على "بطاقات المخزون" لعرض البطاقات.</div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
